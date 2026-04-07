@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ergonaut Trainer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto Mono', 'Courier New', monospace;
+            background-color: #323437;
+            color: #d1d0c5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #d1d0c5;
+        }
+
+        .categoryTabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .categoryTab {
+            padding: 8px 16px;
+            background-color: #646669;
+            color: #d1d0c5;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .categoryTab:hover {
+            background-color: #7a7c7f;
+        }
+
+        .categoryTab.active {
+            background-color: #e2b714;
+            color: #323437;
+        }
+
+        /* Combo Toggle Button */
+        .comboToggleButton {
+            padding: 8px 16px;
+            background-color: #646669;
+            color: #d1d0c5;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .comboToggleButton:hover {
+            background-color: #7a7c7f;
+        }
+
+        /* Combo Panel */
+        .comboPanel {
+            display: none;
+            background-color: #2c2e31;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .comboPanel:not(.hidden) {
+            display: block;
+        }
+
+        .comboTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .comboTable th,
+        .comboTable td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #3e4043;
+        }
+
+        .comboTable th {
+            color: #e2b714;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background-color: #2c2e31;
+        }
+
+        .comboTable tr:hover {
+            background-color: #3e4043;
+        }
+
+        /* Combo hint colors */
+        .combo-hint-type-2 {
+            color: #7a5c00;
+        }
+
+        .combo-hint-type-3 {
+            color: #9a7c00;
+        }
+
+        .combo-hint-type-4 {
+            color: #e2b714;
+        }
+
+        /* Typing Area */
+        .typingArea {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        #hiddenInput {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #textDisplay {
+            background-color: #2c2e31;
+            border-radius: 8px;
+            padding: 30px;
+            min-height: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 20px;
+            line-height: 1.6;
+            cursor: text;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-content: flex-start;
+        }
+
+        .wordWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .word {
+            display: flex;
+            gap: 2px;
+        }
+
+        .wordWrapper.active .word {
+            border-bottom: 2px solid #e2b714;
+        }
+
+        .char {
+            color: #646669;
+            transition: color 0.1s ease;
+        }
+
+        .char.correct {
+            color: #d1d0c5;
+        }
+
+        .char.incorrect {
+            color: #ca4754;
+            background-color: rgba(202, 71, 84, 0.2);
+        }
+
+        .comboHint {
+            font-size: 10px;
+            margin-top: 4px;
+            opacity: 0.8;
+        }
+
+        /* Stats Bar */
+        .statsBar {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            font-size: 18px;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .statLabel {
+            font-size: 12px;
+            color: #646669;
+            margin-bottom: 5px;
+        }
+
+        .statValue {
+            font-size: 24px;
+            font-weight: 600;
+            color: #d1d0c5;
+        }
+
+        /* Results Overlay */
+        .resultsOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .resultsOverlay:not(.hidden) {
+            display: flex;
+        }
+
+        .resultsContent {
+            background-color: #2c2e31;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            min-width: 400px;
+        }
+
+        .resultsTitle {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #e2b714;
+        }
+
+        .resultsStats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .resultStat {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .resultStatLabel {
+            font-size: 12px;
+            color: #646669;
+            margin-bottom: 5px;
+        }
+
+        .resultStatValue {
+            font-size: 36px;
+            font-weight: 600;
+            color: #d1d0c5;
+        }
+
+        .resultsButtons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .resultButton {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-family: inherit;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nextButton {
+            background-color: #e2b714;
+            color: #323437;
+        }
+
+        .nextButton:hover {
+            background-color: #f5c944;
+        }
+
+        .restartButton {
+            background-color: #646669;
+            color: #d1d0c5;
+        }
+
+        .restartButton:hover {
+            background-color: #7a7c7f;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2c2e31;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #646669;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7a7c7f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1 class="title">Ergonaut Trainer</h1>
+            <div class="categoryTabs">
+                <button class="categoryTab active" data-category="2key">2-Key</button>
+                <button class="categoryTab" data-category="3key">3-Key</button>
+                <button class="categoryTab" data-category="ml">ML/AI</button>
+                <button class="categoryTab" data-category="rust">Rust</button>
+                <button class="categoryTab" data-category="haskell">Haskell</button>
+                <button class="categoryTab" data-category="4key">4-Key</button>
+                <button class="categoryTab" data-category="dickens">Dickens</button>
+                <button class="categoryTab" data-category="austen">Austen</button>
+                <button class="categoryTab" data-category="orwell">Orwell</button>
+                <button class="categoryTab" data-category="mixed">Mixed</button>
+            </div>
+            <button class="comboToggleButton" id="comboToggleButton">Combo Reference</button>
+        </div>
+
+        <!-- Combo Panel -->
+        <div class="comboPanel hidden" id="comboPanel">
+            <table class="comboTable" id="comboTable">
+                <thead>
+                    <tr>
+                        <th>Word</th>
+                        <th>Combo Keys</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Typing Area -->
+        <div class="typingArea">
+            <input type="text" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <div id="textDisplay"></div>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="statsBar">
+            <div class="stat">
+                <span class="statLabel">WPM</span>
+                <span class="statValue" id="statsWpm">0</span>
+            </div>
+            <div class="stat">
+                <span class="statLabel">Accuracy</span>
+                <span class="statValue" id="statsAccuracy">100%</span>
+            </div>
+            <div class="stat">
+                <span class="statLabel">Time</span>
+                <span class="statValue" id="statsTime">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Overlay -->
+    <div class="resultsOverlay hidden" id="resultsOverlay">
+        <div class="resultsContent">
+            <h2 class="resultsTitle">Complete!</h2>
+            <div class="resultsStats">
+                <div class="resultStat">
+                    <span class="resultStatLabel">WPM</span>
+                    <span class="resultStatValue" id="resultsWpm">0</span>
+                </div>
+                <div class="resultStat">
+                    <span class="resultStatLabel">Accuracy</span>
+                    <span class="resultStatValue" id="resultsAccuracy">0%</span>
+                </div>
+                <div class="resultStat">
+                    <span class="resultStatLabel">Time</span>
+                    <span class="resultStatValue" id="resultsTime">0:00</span>
+                </div>
+            </div>
+            <div class="resultsButtons">
+                <button class="resultButton nextButton" id="nextButton">Next Text</button>
+                <button class="resultButton restartButton" id="restartButton">Retry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="combos.js"></script>
+    <script src="texts.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
