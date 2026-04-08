@@ -27,10 +27,17 @@
             resultsTime: document.getElementById('resultsTime'),
             nextButton: document.getElementById('nextButton'),
             restartButton: document.getElementById('restartButton'),
-            comboToggleButton: document.getElementById('comboToggleButton'),
-            comboPanel: document.getElementById('comboPanel'),
-            comboTable: document.getElementById('comboTable')
+            comboSearch: document.getElementById('comboSearch'),
+            comboTableBody: document.getElementById('comboTableBody')
         };
+
+        // Don't let typing go to search box
+        el.comboSearch.addEventListener('keydown', function(e) {
+            if (e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
+                // Only allow typing in search if it's focused intentionally
+                return;
+            }
+        });
 
         el.hiddenInput.addEventListener('keydown', function(e) {
             if (state.isFinished) return;
@@ -48,7 +55,14 @@
         });
 
         el.textDisplay.addEventListener('click', function() { el.hiddenInput.focus(); });
-        document.addEventListener('click', function() { el.hiddenInput.focus(); });
+        el.hiddenInput.addEventListener('blur', function() {
+            // Refocus after a tiny delay unless search was clicked
+            setTimeout(function() {
+                if (document.activeElement !== el.comboSearch) {
+                    el.hiddenInput.focus();
+                }
+            }, 50);
+        });
 
         document.querySelectorAll('.categoryTab').forEach(function(tab) {
             tab.addEventListener('click', function() { switchCategory(tab.dataset.category); });
@@ -64,27 +78,39 @@
             restartText();
         });
 
-        el.comboToggleButton.addEventListener('click', function() {
-            el.comboPanel.classList.toggle('hidden');
+        el.comboSearch.addEventListener('input', function() {
+            filterComboTable(el.comboSearch.value.toLowerCase());
         });
 
-        populateComboTable(el.comboTable);
+        // Expose before loadNewText uses it
+        window._trainer = { el: el };
+
+        populateComboTable(el.comboTableBody);
         loadNewText();
         el.hiddenInput.focus();
-
-        // Expose for inline handlers if needed
-        window._trainer = { el: el };
     }
 
-    function populateComboTable(table) {
-        var tbody = table.querySelector('tbody');
+    function populateComboTable(tbody) {
         tbody.innerHTML = '';
         var sorted = Object.entries(COMBOS).sort(function(a, b) { return a[0].localeCompare(b[0]); });
         sorted.forEach(function(entry) {
             var word = entry[0], combo = entry[1];
             var row = document.createElement('tr');
+            row.dataset.word = word;
+            row.dataset.keys = combo.keys;
             row.innerHTML = '<td>' + word + '</td><td class="combo-hint-type-' + combo.type + '">' + combo.keys + '</td><td>' + combo.type + '-key</td>';
             tbody.appendChild(row);
+        });
+    }
+
+    function filterComboTable(query) {
+        var tbody = window._trainer.el.comboTableBody;
+        var rows = tbody.querySelectorAll('tr');
+        rows.forEach(function(row) {
+            var word = row.dataset.word;
+            var keys = row.dataset.keys;
+            var show = !query || word.indexOf(query) !== -1 || keys.toLowerCase().indexOf(query) !== -1;
+            row.style.display = show ? '' : 'none';
         });
     }
 
@@ -138,18 +164,35 @@
             var wordDiv = document.createElement('div');
             wordDiv.className = 'word';
 
+            // Determine which positions to highlight as combo letters
+            var combo = COMBOS[word.toLowerCase().replace(/[^a-z]/g, '')];
+            var comboKeySet = combo ? combo.keys.split('+') : [];
+            var usedKeys = {};
+
             for (var i = 0; i < word.length; i++) {
                 var span = document.createElement('span');
                 span.className = 'char';
                 span.textContent = word[i];
                 span.dataset.wi = wordIdx;
                 span.dataset.ci = i;
+
+                // Highlight first occurrence of each combo key letter
+                if (comboKeySet.length > 0) {
+                    var upper = word[i].toUpperCase();
+                    for (var k = 0; k < comboKeySet.length; k++) {
+                        if (!usedKeys[k] && comboKeySet[k] === upper) {
+                            span.classList.add('combo-letter');
+                            usedKeys[k] = true;
+                            break;
+                        }
+                    }
+                }
+
                 wordDiv.appendChild(span);
             }
             wrapper.appendChild(wordDiv);
 
             // Combo hint
-            var combo = COMBOS[word.toLowerCase().replace(/[^a-z]/g, '')];
             if (combo) {
                 var hint = document.createElement('div');
                 hint.className = 'comboHint combo-hint-type-' + combo.type;

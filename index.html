@@ -22,9 +22,21 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 800px;
+        .layout {
+            display: flex;
+            gap: 20px;
             width: 100%;
+            max-width: 1200px;
+        }
+
+        .mainPanel {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidePanel {
+            width: 300px;
+            flex-shrink: 0;
         }
 
         /* Header */
@@ -32,32 +44,32 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
 
         .title {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 600;
             color: #d1d0c5;
         }
 
         .categoryTabs {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .categoryTab {
-            padding: 8px 16px;
+            padding: 6px 14px;
             background-color: #646669;
             color: #d1d0c5;
             border: none;
             border-radius: 20px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 14px;
+            font-size: 13px;
             transition: all 0.2s ease;
         }
 
@@ -70,86 +82,19 @@
             color: #323437;
         }
 
-        /* Combo Toggle Button */
-        .comboToggleButton {
-            padding: 8px 16px;
-            background-color: #646669;
-            color: #d1d0c5;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .comboToggleButton:hover {
-            background-color: #7a7c7f;
-        }
-
-        /* Combo Panel */
-        .comboPanel {
-            display: none;
-            background-color: #2c2e31;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .comboPanel:not(.hidden) {
-            display: block;
-        }
-
-        .comboTable {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-
-        .comboTable th,
-        .comboTable td {
-            padding: 8px 12px;
-            text-align: left;
-            border-bottom: 1px solid #3e4043;
-        }
-
-        .comboTable th {
-            color: #e2b714;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-            background-color: #2c2e31;
-        }
-
-        .comboTable tr:hover {
-            background-color: #3e4043;
-        }
-
-        /* Combo hint colors */
-        .combo-hint-type-2 {
-            color: #7a5c00;
-        }
-
-        .combo-hint-type-3 {
-            color: #9a7c00;
-        }
-
-        .combo-hint-type-4 {
-            color: #e2b714;
+        /* Hidden Input */
+        #hiddenInput {
+            position: absolute;
+            top: -100px;
+            opacity: 0;
+            width: 1px;
+            height: 1px;
         }
 
         /* Typing Area */
         .typingArea {
             position: relative;
-            margin-bottom: 30px;
-        }
-
-        #hiddenInput {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
+            margin-bottom: 20px;
         }
 
         #textDisplay {
@@ -157,14 +102,14 @@
             border-radius: 8px;
             padding: 30px;
             min-height: 200px;
-            max-height: 300px;
+            max-height: 350px;
             overflow-y: auto;
             font-size: 20px;
             line-height: 1.6;
             cursor: text;
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px 14px;
             align-content: flex-start;
         }
 
@@ -176,7 +121,7 @@
 
         .word {
             display: flex;
-            gap: 2px;
+            gap: 1px;
         }
 
         .wordWrapper.active .word {
@@ -186,6 +131,10 @@
         .char {
             color: #646669;
             transition: color 0.1s ease;
+        }
+
+        .char.combo-letter {
+            color: #e2b714;
         }
 
         .char.correct {
@@ -199,8 +148,21 @@
 
         .comboHint {
             font-size: 10px;
-            margin-top: 4px;
-            opacity: 0.8;
+            margin-top: 2px;
+            opacity: 0.85;
+        }
+
+        /* Combo hint colors */
+        .combo-hint-type-2 {
+            color: #7a5c00;
+        }
+
+        .combo-hint-type-3 {
+            color: #9a7c00;
+        }
+
+        .combo-hint-type-4 {
+            color: #e2b714;
         }
 
         /* Stats Bar */
@@ -227,6 +189,69 @@
             font-size: 24px;
             font-weight: 600;
             color: #d1d0c5;
+        }
+
+        /* Side Panel - Combo Reference */
+        .comboPanel {
+            background-color: #2c2e31;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+            position: sticky;
+            top: 20px;
+        }
+
+        .comboPanelTitle {
+            font-size: 14px;
+            font-weight: 600;
+            color: #e2b714;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .comboSearch {
+            width: 100%;
+            padding: 8px 12px;
+            background-color: #3e4043;
+            border: 1px solid #646669;
+            border-radius: 6px;
+            color: #d1d0c5;
+            font-family: inherit;
+            font-size: 13px;
+            margin-bottom: 12px;
+            outline: none;
+        }
+
+        .comboSearch:focus {
+            border-color: #e2b714;
+        }
+
+        .comboTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .comboTable th {
+            padding: 6px 8px;
+            text-align: left;
+            border-bottom: 2px solid #3e4043;
+            color: #e2b714;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            background-color: #2c2e31;
+        }
+
+        .comboTable td {
+            padding: 5px 8px;
+            border-bottom: 1px solid #3e4043;
+        }
+
+        .comboTable tr:hover td {
+            background-color: #3e4043;
         }
 
         /* Results Overlay */
@@ -321,7 +346,7 @@
 
         /* Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
@@ -337,62 +362,78 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #7a7c7f;
         }
+
+        /* Responsive: hide side panel on narrow screens */
+        @media (max-width: 900px) {
+            .sidePanel {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1 class="title">Ergonaut Trainer</h1>
-            <div class="categoryTabs">
-                <button class="categoryTab active" data-category="2key">2-Key</button>
-                <button class="categoryTab" data-category="3key">3-Key</button>
-                <button class="categoryTab" data-category="ml">ML/AI</button>
-                <button class="categoryTab" data-category="rust">Rust</button>
-                <button class="categoryTab" data-category="haskell">Haskell</button>
-                <button class="categoryTab" data-category="4key">4-Key</button>
-                <button class="categoryTab" data-category="dickens">Dickens</button>
-                <button class="categoryTab" data-category="austen">Austen</button>
-                <button class="categoryTab" data-category="orwell">Orwell</button>
-                <button class="categoryTab" data-category="mixed">Mixed</button>
+    <div class="layout">
+        <!-- Main Panel -->
+        <div class="mainPanel">
+            <!-- Header -->
+            <div class="header">
+                <h1 class="title">Ergonaut Trainer</h1>
+                <div class="categoryTabs">
+                    <button class="categoryTab active" data-category="2key">2-Key</button>
+                    <button class="categoryTab" data-category="3key">3-Key</button>
+                    <button class="categoryTab" data-category="ml">ML/AI</button>
+                    <button class="categoryTab" data-category="rust">Rust</button>
+                    <button class="categoryTab" data-category="haskell">Haskell</button>
+                    <button class="categoryTab" data-category="4key">4-Key</button>
+                    <button class="categoryTab" data-category="dickens">Dickens</button>
+                    <button class="categoryTab" data-category="austen">Austen</button>
+                    <button class="categoryTab" data-category="orwell">Orwell</button>
+                    <button class="categoryTab" data-category="twain">Twain</button>
+                    <button class="categoryTab" data-category="doyle">Conan Doyle</button>
+                    <button class="categoryTab" data-category="shakespeare">Shakespeare</button>
+                    <button class="categoryTab" data-category="mixed">Mixed</button>
+                </div>
             </div>
-            <button class="comboToggleButton" id="comboToggleButton">Combo Reference</button>
+
+            <!-- Typing Area -->
+            <div class="typingArea">
+                <input type="text" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <div id="textDisplay"></div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="statsBar">
+                <div class="stat">
+                    <span class="statLabel">WPM</span>
+                    <span class="statValue" id="statsWpm">0</span>
+                </div>
+                <div class="stat">
+                    <span class="statLabel">Accuracy</span>
+                    <span class="statValue" id="statsAccuracy">100%</span>
+                </div>
+                <div class="stat">
+                    <span class="statLabel">Time</span>
+                    <span class="statValue" id="statsTime">0:00</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Combo Panel -->
-        <div class="comboPanel hidden" id="comboPanel">
-            <table class="comboTable" id="comboTable">
-                <thead>
-                    <tr>
-                        <th>Word</th>
-                        <th>Combo Keys</th>
-                        <th>Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Typing Area -->
-        <div class="typingArea">
-            <input type="text" id="hiddenInput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-            <div id="textDisplay"></div>
-        </div>
-
-        <!-- Stats Bar -->
-        <div class="statsBar">
-            <div class="stat">
-                <span class="statLabel">WPM</span>
-                <span class="statValue" id="statsWpm">0</span>
-            </div>
-            <div class="stat">
-                <span class="statLabel">Accuracy</span>
-                <span class="statValue" id="statsAccuracy">100%</span>
-            </div>
-            <div class="stat">
-                <span class="statLabel">Time</span>
-                <span class="statValue" id="statsTime">0:00</span>
+        <!-- Side Panel - Combo Reference -->
+        <div class="sidePanel">
+            <div class="comboPanel">
+                <div class="comboPanelTitle">Combo Reference</div>
+                <input type="text" class="comboSearch" id="comboSearch" placeholder="Search combos..." autocomplete="off">
+                <table class="comboTable" id="comboTable">
+                    <thead>
+                        <tr>
+                            <th>Word</th>
+                            <th>Keys</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comboTableBody">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
