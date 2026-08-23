@@ -83,7 +83,7 @@
         });
 
         // Expose before loadNewText uses it
-        window._trainer = { el: el };
+        window._trainer = { el: el, state: state, corpusId: '', loadNewText: loadNewText };
 
         populateComboTable(el.comboTableBody);
         loadNewText();
@@ -124,14 +124,34 @@
     }
 
     function loadNewText() {
-        var cat = TEXTS[state.currentCategory];
+        var pinned = pinnedCorpus();
+        var cat = TEXTS[pinned ? pinned.category : state.currentCategory];
         var texts = cat.texts || cat;
-        var idx = Math.floor(Math.random() * texts.length);
+        var idx = pinned ? pinned.index : Math.floor(Math.random() * texts.length);
+        if (pinned) {
+            state.currentCategory = pinned.category;
+            window._trainer.corpusId = pinned.category + '/' + pinned.index;
+        }
         state.currentText = texts[idx];
         state.words = state.currentText.split(' ');
         resetState();
         renderText();
         window._trainer.el.hiddenInput.focus();
+    }
+
+    // A recorded session must use one pre-registered text, not a random pick,
+    // so the corpus hash in the session manifest means something.
+    function pinnedCorpus() {
+        var match = /[?&]corpus=([^&]+)/.exec(window.location.search);
+        if (!match) return null;
+        var parts = decodeURIComponent(match[1]).split('/');
+        var category = parts[0];
+        var index = parseInt(parts[1], 10);
+        var cat = TEXTS[category];
+        if (!cat) return null;
+        var texts = cat.texts || cat;
+        if (!(index >= 0 && index < texts.length)) return null;
+        return { category: category, index: index };
     }
 
     function restartText() {
