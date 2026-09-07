@@ -163,10 +163,17 @@ const TEXTS = {
     // EMG capture drills for the neural-band project. Long enough for a full
     // 60 s block at 80 wpm; the right-hand drill is balanced so each right
     // finger gets a similar number of presses while the armband records.
+    // EMG capture corpora for the neural-band project.
+    // 0: U/I/O/P pilot. One immediate key per right finger, isolated presses.
+    // 1: continuous drill. Immediate keys only; balance is capped because the
+    //    middle finger owns only i and the ring only o once hold-taps are out.
+    // 2: natural passage. Its home-row and thumb keys are hold-taps, so their
+    //    events arrive after the tap decision and cannot anchor an EMG window.
     "emg": {
         name: "EMG 60s",
         texts: [
-            "hip hook hop lip imp limp nil mop lippy ion pink ploy pip hill pin opinion pulp ilk up nip hoop kip hilly pop hulk imp limp lippy kilo nippy lion pupil opium pill pin yip loin lip plum pink pooh nip kill poppy honk hip limp pupil koi hop ion mop yip lip pinion poop kiln up opium pill pin opinion lippy hop oink pop him pupil ill yip hip moil pip holy nip pill imp nil pup link pull kin polyp pink plop join milk pip lump noil poppy kip kimono pulp kin polyp kiln pop milky up moo pinky pol ilk pump kip pooh punk oil pup mill koi nippy plop inn pippin pillion pinion pol hoy oink puppy kilo poppy milk pinky loop nippy kink polyp",
+            "i p o u o p i p o u p u o i p u i p i p o i o p u i p u p i p u p u i p u o u o i p o i p i o i u o u i u o u o i o u o",
+            "hip hoop ion phi hippo hoi moo imp nip pip opinion pooh yip hop pinion poop ion pin pion hippo hip onion pip mop opinion phi pup hoop pinion imp opium pop hoi pin up hippo hop hip opinion mop ion nip pippin pooh onion pip moo yip imp pion opium hoi poppy phi poop minim up pop pinion pup mop pin pion moo him inn pippin poop hoop nippy minion hop pop nip poppy yip yin onion him pippin hoy noon opium minion pooh nippy up pup poppy moon my him pony inn pump puppy yin pun union nippy upon unpin minion moon you minim my yon inn noon pump pony pun puppy unpin yin hoy union you moon my yon noon upon pump pony puppy unpin hominy pun",
             "the quiet morning light moved across the table while the recorder kept a steady account of every small motion the hand made during the block of work and the operator did not need to think about the process at all because the routine was already familiar from many earlier attempts that had taught the value of a calm and even pace which does not change when the passage grows longer or when the mind begins to wander toward other matters that can wait until the session is finished and the band is placed back on the desk beside the keyboard where it will rest until the next block begins in the same careful manner as before with no hurry and no wasted motion"
         ]
     },
