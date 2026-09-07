@@ -160,6 +160,16 @@ const TEXTS = {
             "love looks not with the eyes but with the mind and therefore is winged cupid painted blind because the value of a relationship is not found in the material view of the other person but in the truth that two people can build together over time through their shared activity and practice"
         ]
     },
+    // EMG capture drills for the neural-band project. Long enough for a full
+    // 60 s block at 80 wpm; the right-hand drill is balanced so each right
+    // finger gets a similar number of presses while the armband records.
+    "emg": {
+        name: "EMG 60s",
+        texts: [
+            "hip hook hop lip imp limp nil mop lippy ion pink ploy pip hill pin opinion pulp ilk up nip hoop kip hilly pop hulk imp limp lippy kilo nippy lion pupil opium pill pin yip loin lip plum pink pooh nip kill poppy honk hip limp pupil koi hop ion mop yip lip pinion poop kiln up opium pill pin opinion lippy hop oink pop him pupil ill yip hip moil pip holy nip pill imp nil pup link pull kin polyp pink plop join milk pip lump noil poppy kip kimono pulp kin polyp kiln pop milky up moo pinky pol ilk pump kip pooh punk oil pup mill koi nippy plop inn pippin pillion pinion pol hoy oink puppy kilo poppy milk pinky loop nippy kink polyp",
+            "the quiet morning light moved across the table while the recorder kept a steady account of every small motion the hand made during the block of work and the operator did not need to think about the process at all because the routine was already familiar from many earlier attempts that had taught the value of a calm and even pace which does not change when the passage grows longer or when the mind begins to wander toward other matters that can wait until the session is finished and the band is placed back on the desk beside the keyboard where it will rest until the next block begins in the same careful manner as before with no hurry and no wasted motion"
+        ]
+    },
     "mixed": {
         name: "Mixed",
         texts: [
