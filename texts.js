@@ -178,6 +178,23 @@ const TEXTS = {
             "i u o p o i u p i o i u i u o p u o u o i p o i p u o u i o i p o p o u p o i o i p u o i p u o i p i u p u p u p u p i"
         ]
     },
+    "common": {
+        name: "Common",
+        texts: [
+            "of all the things we can do in life the best is to live each day as it is and not wait for a better one to come along",
+            "it is true that we may say we are one thing but we do another and this is how we learn who we really are as people",
+            "you can read this line as it is or you can use it to form an idea of your own in the world around you",
+            "his father said that we must win the day as we can and not think of what we lost or what we may yet gain",
+            "she ran to the house with him and they sat by the fire to see if it was as warm as it had been before",
+            "there is no way to get out of this but to go on and do what we can with what we have in this life",
+            "the book says that a man can be a father and a son at one time and still be himself in the end",
+            "we had a lot of work to do but we did it as fast as we could and then we went home to rest",
+            "if you hit the ball at this angle it will go where we want it to go and that is all there is to it",
+            "the answer to this question is in the first line of the letter that he sent us last year",
+            "my eye is on the goal and my hand is on the key and i am ready to try as hard as i can today",
+            "this is how it is: we go up and down in this life but we can still win if we do not give up"
+        ]
+    },
     "mixed": {
         name: "Mixed",
         texts: [
